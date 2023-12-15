@@ -5,6 +5,8 @@ import qualified Data.Set as Set
 import Data.Function ((&))
 import Data.Maybe
 
+import MiniTest
+
 main = do
   let group = Group (Set.fromList [1,2])
   isComplete group `shouldBe` False
@@ -63,15 +65,6 @@ main = do
 
   -- nextSolution sampleGridSolve `shouldBe` gridWith (5,1) (Just 5) sampleGridSolve
   
-
-
-shouldBe :: Show a => a -> a -> IO()
-shouldBe expr expected =
-  if show expr == show expected then
-    putStrLn $ "Passed " ++ show expected
-  else do
-    putStrLn $ "Failed " ++ show expected
-    putStrLn $ "   got " ++ show expr
 
 type Cell = Maybe Int
 newtype Group = Group (Set Int)
@@ -186,11 +179,11 @@ cellIndex (x, y) = (y - 1) * gridSize + (x - 1)
 allCellCoords =  (,) <$> [1..gridSize] <*> [1..gridSize] 
 
 
-nextSolution :: Grid -> Grid
-nextSolution grid = 
-  Grid $ map (\coord -> newCell $ cellAt coord grid) allCellCoords
-  where 
-    newCell currentCell
+-- nextSolution :: Grid -> Grid
+-- nextSolution grid = 
+--   Grid $ map (\coord -> newCell $ cellAt coord grid) allCellCoords
+--   where 
+--     newCell currentCell
 --   go (1,1) grid
 --   where
 --     go (x,y) grid = 

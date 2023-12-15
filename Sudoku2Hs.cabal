@@ -1,0 +1,19 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           Sudoku2Hs
+version:        0.1.0.0
+build-type:     Simple
+
+executable sudoku-exe
+  main-is: Main.hs
+  other-modules:
+      MiniTest
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints -Wno-missing-signatures -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+  default-language: GHC2021

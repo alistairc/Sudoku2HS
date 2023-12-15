@@ -1,0 +1,28 @@
+name:                Sudoku2Hs
+version:             0.1.0.0
+
+dependencies:
+- base >= 4.7 && < 5
+- containers
+
+language: GHC2021
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wpartial-fields
+- -Wredundant-constraints
+- -Wno-missing-signatures   # keep type sigs optional
+
+executables:
+  sudoku-exe:
+    main:                Main.hs
+    other-modules:
+    - MiniTest
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
