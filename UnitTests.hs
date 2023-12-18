@@ -98,4 +98,8 @@ main = do
     in do
       cellAt (3,3) newGrid `shouldBe` Just 1
 
-  -- nextSolution sampleGridSolve `shouldBe` gridWith (5,1) (Just 5) sampleGridSolve
+
+  solveCell (2,2) sampleGridSolve `shouldBe` Just 5    -- already solved
+  solveCell (5,5) sampleGridSolve `shouldBe` Nothing   -- not solvable 
+  solveCell (1,5) sampleGridSolve `shouldBe` Just 5    -- easy  
+

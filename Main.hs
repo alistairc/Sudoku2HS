@@ -20,6 +20,7 @@ isComplete group =
   let (Group digits) = group in
   Set.size digits == gridSize
 
+missingDigits :: Group -> Set Int
 missingDigits group =
   let (Group digits) = group in
   Set.difference allDigits digits
@@ -27,10 +28,11 @@ missingDigits group =
 cellsToGroup :: [Cell] -> Group
 cellsToGroup cells = Group (cells & catMaybes & Set.fromList)
 
+allDigits :: Set Int
 allDigits = Set.fromList [1..gridSize]
 
 selectRow :: Int -> Grid -> [Cell]
-selectRow rowNum (Grid cells) = 
+selectRow rowNum (Grid cells) =
   cells
   & drop ((rowNum - 1) * gridSize)
   & take gridSize
@@ -47,19 +49,19 @@ selectSquare (x,y) (Grid cells) =
     rowsToSkip = (y - 1) * squareSize
     colsToSkip = (x - 1) * squareSize
   in
-    cells 
+    cells
     & splitEvery gridSize
     & drop rowsToSkip & take squareSize
     & map (\row -> row & drop colsToSkip & take squareSize)
     & concat
 
 squareContaining :: (Int, Int) -> (Int, Int)
-squareContaining (x,y) = 
+squareContaining (x,y) =
   (((x -1) `div` squareSize) + 1, ((y - 1) `div` squareSize) + 1)
 
 possibleDigits :: Grid -> (Int, Int) -> Set Int
 possibleDigits grid (x, y) =
-  let 
+  let
     squarePos = squareContaining (x,y)
     colGroup = cellsToGroup $ selectCol x grid
     rowGroup = cellsToGroup $ selectRow y grid
@@ -80,19 +82,17 @@ cellAt :: (Int, Int) -> Grid -> Cell
 cellAt coords (Grid cells) =
   cells !! cellIndex coords
 
+cellIndex :: (Int, Int) -> Int
 cellIndex (x, y) = (y - 1) * gridSize + (x - 1)
 
-allCellCoords =  (,) <$> [1..gridSize] <*> [1..gridSize] 
+allCellCoords :: [(Int, Int)]
+allCellCoords =  (,) <$> [1..gridSize] <*> [1..gridSize]
 
-
--- nextSolution :: Grid -> Grid
--- nextSolution grid = 
---   Grid $ map (\coord -> newCell $ cellAt coord grid) allCellCoords
---   where 
---     newCell currentCell
---   go (1,1) grid
---   where
---     go (x,y) grid = 
---       let possible = possibleDigits grid (x,y) & Set.toList
---        in case possible of
---          [single] -> gridWith (x,y) single
+solveCell :: (Int, Int) -> Grid -> Maybe Int
+solveCell (x,y) grid =
+  current & whenNothing trySolve
+  where
+    current = cellAt (x,y) grid
+    trySolve = if Set.size possibles == 1 then Set.toList possibles & head & Just else Nothing
+    possibles = possibleDigits grid (x,y)
+    whenNothing nothingVal source = maybe source Just nothingVal
