@@ -98,8 +98,8 @@ main = do
     in do
       cellAt (3,3) newGrid `shouldBe` Just 1
 
-
   solveCell (2,2) sampleGridSolve `shouldBe` Just 5    -- already solved
   solveCell (5,5) sampleGridSolve `shouldBe` Nothing   -- not solvable 
-  solveCell (1,5) sampleGridSolve `shouldBe` Just 5    -- easy  
+  solveCell (1,5) sampleGridSolve `shouldBe` Just 5    -- easy
+  solveCell (4,6) sampleGridSolve `shouldBe` Just 2    -- harder  
 
