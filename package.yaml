@@ -1,4 +1,4 @@
-name:                Sudoku2Hs
+name:                sudoku
 version:             0.1.0.0
 
 dependencies:
@@ -20,9 +20,16 @@ ghc-options:
 executables:
   sudoku-exe:
     main:                Main.hs
-    other-modules:
-    - MiniTest
+    # other-modules:
+    # - MiniTest
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+
+tests:
+  sudoku-unit-test:
+    main: UnitTests.main
+    other-modules:
+    - MiniTest
+    - Main
