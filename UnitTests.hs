@@ -42,6 +42,8 @@ sampleGridSolve = Grid [
   Just 9,  Just 1,  Just 2,  Just 3,  Nothing, Just 5,  Just 6,  Just 7,  Just 8
   ]
 
+emptyGrid = Grid $ replicate (gridSize * gridSize) Nothing
+
 main = do
   let group = Group (Set.fromList [1,2])
   isComplete group `shouldBe` False
@@ -88,7 +90,14 @@ main = do
 
   cellAt (2,1) sampleGridPartial `shouldBe` Just 2
   cellAt (2,4) sampleGridPartial `shouldBe` Nothing
-  
+
+  -- corners
+  cellAt (1,1) sampleGridPartial `shouldBe` Nothing
+  cellAt (9,1) sampleGridPartial `shouldBe` Just 9
+  cellAt (1,9) sampleGridPartial `shouldBe` Just 9
+  cellAt (9,9) sampleGridPartial `shouldBe` Just 8
+
+
   let newGrid = gridWith (1,1) Nothing sampleGridFull
     in do
       cellAt (1,1) newGrid `shouldBe` Nothing
@@ -103,3 +112,5 @@ main = do
   solveCell (1,5) sampleGridSolve `shouldBe` Just 5    -- easy
   solveCell (4,6) sampleGridSolve `shouldBe` Just 2    -- harder  
 
+  solveIter sampleGridPartial `shouldBe` sampleGridFull
+  solveIter sampleGridSolve `shouldBe` sampleGridFull

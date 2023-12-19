@@ -10,7 +10,7 @@ main = do
 
 type Cell = Maybe Int
 newtype Group = Group (Set Int)
-newtype Grid = Grid [Cell]
+newtype Grid = Grid [Cell] deriving (Show, Eq)
 
 squareSize = 3
 gridSize = squareSize * squareSize
@@ -96,3 +96,13 @@ solveCell (x,y) grid =
     trySolve = if Set.size possibles == 1 then Set.toList possibles & head & Just else Nothing
     possibles = possibleDigits grid (x,y)
     whenNothing nothingVal source = maybe source Just nothingVal
+
+  
+nextSolution :: Grid -> Grid
+nextSolution initial = allCellCoords & foldr (\coord grid -> gridWith coord (solveCell coord initial) grid) initial
+
+solveIter :: Grid -> Grid
+solveIter current = 
+  let next = nextSolution current
+   in if next == current then current else solveIter next
+
