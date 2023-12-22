@@ -131,3 +131,16 @@ main = do
     \3456 8912\n\
     \6789 2345\n\
     \9123 5678\n"
+
+  parseGrid "" `shouldBe` emptyGrid
+  parseGrid
+    "1234 6789\n\
+    \4567 9123\n\
+    \7891 3456\n\
+    \234   891\n\
+    \         \n\
+    \891   567\n\
+    \3456 8912\n\
+    \6789 2345\n\
+    \9123 5678\n"
+    `shouldBe` sampleGridSolve

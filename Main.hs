@@ -6,19 +6,18 @@ import Data.Function ((&))
 import Data.Maybe
 
 main = do
-  putStrLn $ formatGrid $ solveIter $ Grid [
-    Just 5,  Just 8,  Just 3,  Nothing, Nothing, Just 4,  Nothing, Just 1,  Nothing,
-    Nothing, Nothing, Just 7,  Just 1,  Nothing, Nothing, Nothing, Nothing, Nothing,
-    Just 9,  Just 2,  Nothing, Just 6,  Just 7,  Nothing, Nothing, Nothing, Nothing,
+  let source = 
+        "583  4 1 \
+        \  71     \
+        \92 67    \
+        \27  5   8\
+        \   2 7   \
+        \3   1  76\
+        \    46 91\
+        \     13  \
+        \ 4 8  765"
 
-    Just 2,  Just 7,  Nothing, Nothing, Just 5,  Nothing, Nothing, Nothing, Just 8,
-    Nothing, Nothing, Nothing, Just 2,  Nothing, Just 7,  Nothing, Nothing, Nothing,
-    Just 3,  Nothing, Nothing, Nothing, Just 1,  Nothing, Nothing, Just 7,  Just 6,
-
-    Nothing, Nothing, Nothing, Nothing, Just 4,  Just 6,  Nothing, Just 9,  Just 1,
-    Nothing, Nothing, Nothing, Nothing, Nothing, Just 1,  Just 3,  Nothing, Nothing,
-    Nothing, Just 4,  Nothing, Just 8,  Nothing, Nothing, Just 7,  Just 6,  Just 5
-    ]
+  putStrLn $ formatGrid $ solveIter $ parseGrid source
 
 type Cell = Maybe Int
 newtype Group = Group (Set Int)
@@ -108,12 +107,12 @@ solveCell (x,y) grid =
     possibles = possibleDigits grid (x,y)
     whenNothing nothingVal source = maybe nothingVal Just source
 
-  
+
 nextSolution :: Grid -> Grid
 nextSolution initial = allCellCoords & foldr (\coord grid -> gridWith coord (solveCell coord grid) grid) initial
 
 solveIter :: Grid -> Grid
-solveIter current = 
+solveIter current =
   let next = nextSolution current
    in if next == current then current else solveIter next
 
@@ -122,3 +121,21 @@ formatGrid (Grid cells) =
   cells & map cellToChar & splitEvery gridSize & unlines
   where
     cellToChar cell = maybe ' ' (head . show) cell
+
+parseGrid :: String -> Grid
+parseGrid source = Grid $
+  source ++ replicate totalCells ' ' & filter validChar & map charToCell & take totalCells
+  where
+    totalCells = gridSize * gridSize
+    validChar char = char `elem` " 123456789"
+    charToCell char
+      | char == '1' = Just 1
+      | char == '2' = Just 2
+      | char == '3' = Just 3
+      | char == '4' = Just 4
+      | char == '5' = Just 5
+      | char == '6' = Just 6
+      | char == '7' = Just 7
+      | char == '8' = Just 8
+      | char == '9' = Just 9
+      | otherwise = Nothing
