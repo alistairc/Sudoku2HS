@@ -106,3 +106,9 @@ solveIter current =
   let next = nextSolution current
    in if next == current then current else solveIter next
 
+formatGrid :: Grid -> String
+formatGrid (Grid cells) =
+  cells & map cellToChar & splitEvery gridSize & unlines
+
+cellToChar :: Cell -> Char
+cellToChar cell = maybe ' ' (head . show) cell

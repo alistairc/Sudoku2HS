@@ -113,4 +113,8 @@ main = do
   solveCell (4,6) sampleGridSolve `shouldBe` Just 2    -- harder  
 
   solveIter sampleGridPartial `shouldBe` sampleGridFull
+
+  putStrLn $ formatGrid sampleGridSolve
+  putStrLn $ formatGrid $ nextSolution sampleGridSolve    -- middle rows are all wrong!!!
+
   solveIter sampleGridSolve `shouldBe` sampleGridFull
