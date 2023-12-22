@@ -6,7 +6,17 @@ import Data.Function ((&))
 import Data.Maybe
 
 main = do
-  print "hello"
+  putStrLn $ formatGrid $ solveIter $ Grid [
+    Just 1,  Just 2,  Just 3,  Just 4,  Nothing, Just 6,  Just 7,  Just 8,  Just 9,
+    Just 4,  Just 5,  Just 6,  Just 7,  Nothing, Just 9,  Just 1,  Just 2,  Just 3,
+    Just 7,  Just 8,  Just 9,  Just 1,  Nothing, Just 3,  Just 4,  Just 5,  Just 6,
+    Just 2,  Just 3,  Just 4,  Nothing, Nothing, Nothing, Just 8,  Just 9,  Just 1,
+    Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, 
+    Just 8,  Just 9,  Just 1,  Nothing, Nothing, Nothing, Just 5,  Just 6,  Just 7,
+    Just 3,  Just 4,  Just 5,  Just 6,  Nothing, Just 8,  Just 9,  Just 1,  Just 2,
+    Just 6,  Just 7,  Just 8,  Just 9,  Nothing, Just 2,  Just 3,  Just 4,  Just 5,
+    Just 9,  Just 1,  Just 2,  Just 3,  Nothing, Just 5,  Just 6,  Just 7,  Just 8
+    ]
 
 type Cell = Maybe Int
 newtype Group = Group (Set Int)
@@ -72,7 +82,6 @@ possibleDigits grid (x, y) =
 splitEvery :: Int -> [a] -> [[a]]
 splitEvery n = takeWhile (not.null) . map (take n) . iterate (drop n)
 
-
 gridWith :: (Int, Int) -> Cell -> Grid -> Grid
 gridWith coords cell (Grid cells) =
   let pos = cellIndex coords
@@ -95,11 +104,11 @@ solveCell (x,y) grid =
     current = cellAt (x,y) grid
     trySolve = if Set.size possibles == 1 then Set.toList possibles & head & Just else Nothing
     possibles = possibleDigits grid (x,y)
-    whenNothing nothingVal source = maybe source Just nothingVal
+    whenNothing nothingVal source = maybe nothingVal Just source
 
   
 nextSolution :: Grid -> Grid
-nextSolution initial = allCellCoords & foldr (\coord grid -> gridWith coord (solveCell coord initial) grid) initial
+nextSolution initial = allCellCoords & foldr (\coord grid -> gridWith coord (solveCell coord grid) grid) initial
 
 solveIter :: Grid -> Grid
 solveIter current = 
@@ -109,6 +118,5 @@ solveIter current =
 formatGrid :: Grid -> String
 formatGrid (Grid cells) =
   cells & map cellToChar & splitEvery gridSize & unlines
-
-cellToChar :: Cell -> Char
-cellToChar cell = maybe ' ' (head . show) cell
+  where
+    cellToChar cell = maybe ' ' (head . show) cell

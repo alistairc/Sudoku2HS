@@ -107,14 +107,27 @@ main = do
     in do
       cellAt (3,3) newGrid `shouldBe` Just 1
 
-  solveCell (2,2) sampleGridSolve `shouldBe` Just 5    -- already solved
+  -- already solved
+  cellAt (2,2) sampleGridSolve `shouldBe` Just 5
+  solveCell (2,2) sampleGridSolve `shouldBe` Just 5
+
+  cellAt (1,4) sampleGridSolve `shouldBe` Just 2
+  solveCell (1,4) sampleGridSolve `shouldBe` Just 2
+
   solveCell (5,5) sampleGridSolve `shouldBe` Nothing   -- not solvable 
   solveCell (1,5) sampleGridSolve `shouldBe` Just 5    -- easy
   solveCell (4,6) sampleGridSolve `shouldBe` Just 2    -- harder  
 
   solveIter sampleGridPartial `shouldBe` sampleGridFull
-
-  putStrLn $ formatGrid sampleGridSolve
-  putStrLn $ formatGrid $ nextSolution sampleGridSolve    -- middle rows are all wrong!!!
-
   solveIter sampleGridSolve `shouldBe` sampleGridFull
+
+  formatGrid sampleGridSolve `shouldBe`
+    "1234 6789\n\
+    \4567 9123\n\
+    \7891 3456\n\
+    \234   891\n\
+    \         \n\
+    \891   567\n\
+    \3456 8912\n\
+    \6789 2345\n\
+    \9123 5678\n"
